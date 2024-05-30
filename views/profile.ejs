@@ -87,10 +87,16 @@
             </div>
             <!-- Post Content -->
             <p class="text-gray-700 mt-1"><%= post.content %></p>
+
+            <small>Likes: <%= post.like.length %></small>
             <div>
-              <a href="#" class="text-blue-500 hover:text-blue-600">Like</a>
               <a
-                href="/edit-post/<%= post._id %>"
+                href="/like/<%= post._id %>"
+                class="text-blue-500 hover:text-blue-600">
+                <%= post.like.indexOf(userData.id) ? "Like" : "Unlike" %></a
+              >
+              <a
+                href="/edit/<%= post._id %>"
                 class="text-green-500 hover:text-green-600 ml-4"
                 >Edit</a
               >
@@ -102,7 +108,6 @@
             </div>
           </div>
           <% }); %>
-          <!-- Repeat the above div for each post -->
         </div>
       </div>
     </div>

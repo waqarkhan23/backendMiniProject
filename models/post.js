@@ -10,10 +10,12 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  like: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
+  like: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 const post = mongoose.model("post", postSchema);
 

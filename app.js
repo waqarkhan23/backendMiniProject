@@ -26,6 +26,29 @@ app.get("/profile", isLoggedIn, async (req, res) => {
   await userData.populate("posts");
   res.render("profile", { userData: userData });
 });
+app.get("/edit/:id", isLoggedIn, async (req, res) => {
+  const post = await postModel.findOne({ _id: req.params.id }).populate("user");
+  res.render("edit", { post: post });
+});
+app.get("/like/:id", isLoggedIn, async (req, res) => {
+  const post = await postModel.findOne({ _id: req.params.id }).populate("user");
+  if (post.like.includes(req.user.id)) {
+    post.like.splice(post.like.indexOf(req.user.id), 1);
+  } else {
+    post.like.push(req.user.id);
+  }
+
+  await post.save();
+  res.redirect("/profile");
+});
+
+app.post("/update/:id", isLoggedIn, async (req, res) => {
+  const post = await postModel.findOneAndUpdate(
+    { _id: req.params.id },
+    { content: req.body.content }
+  );
+  res.redirect("/profile");
+});
 app.post("/post", isLoggedIn, async (req, res) => {
   const userData = await userModel.findOne({ _id: req.user.id });
   const createdPost = await postModel.create({
@@ -36,6 +59,7 @@ app.post("/post", isLoggedIn, async (req, res) => {
   await userData.save();
   res.redirect("/profile");
 });
+
 app.post("/signup", async (req, res) => {
   let { name, email, password, username, age } = req.body;
   let found = await userModel.findOne({ email: email });

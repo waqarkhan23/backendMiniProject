@@ -49,6 +49,10 @@ app.post("/update/:id", isLoggedIn, async (req, res) => {
   );
   res.redirect("/profile");
 });
+app.get("/delete/:id", isLoggedIn, async (req, res) => {
+  const post = await postModel.findByIdAndDelete({ _id: req.params.id });
+  res.redirect("/profile");
+});
 app.post("/post", isLoggedIn, async (req, res) => {
   const userData = await userModel.findOne({ _id: req.user.id });
   const createdPost = await postModel.create({
